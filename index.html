@@ -1,0 +1,1687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trading AT3X — AI-Powered Trading Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #070B14;
+    --bg2: #0D1220;
+    --bg3: #111827;
+    --cyan: #00D4FF;
+    --buy: #00E676;
+    --sell: #FF3D71;
+    --gold: #FFD060;
+    --purple: #8B5CF6;
+    --text: #E2E8F0;
+    --muted: #64748B;
+    --border: rgba(255,255,255,0.07);
+    --card: rgba(13,18,32,0.9);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+
+  /* ─── PAGE SYSTEM ─── */
+  .page { display: none; min-height: 100vh; }
+  .page.active { display: block; }
+
+  /* ═══════════════════════════════════════════
+     LOGIN PAGE — VIBRANT REALISTIC REDESIGN
+  ═══════════════════════════════════════════ */
+  #loginPage {
+    min-height: 100vh;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    position: relative;
+    overflow: hidden;
+    background: #04060F;
+  }
+  #loginPage.active { display: flex; }
+
+  /* Deep space background */
+  .lp-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background:
+      radial-gradient(ellipse 120% 80% at 50% -10%, rgba(88,0,255,0.35) 0%, transparent 55%),
+      radial-gradient(ellipse 80% 60% at 10% 50%, rgba(0,180,255,0.2) 0%, transparent 50%),
+      radial-gradient(ellipse 70% 50% at 90% 60%, rgba(255,60,180,0.18) 0%, transparent 50%),
+      radial-gradient(ellipse 100% 40% at 50% 100%, rgba(0,230,120,0.1) 0%, transparent 60%),
+      linear-gradient(180deg, #04060F 0%, #080B1A 50%, #06091A 100%);
+  }
+
+  /* Light ray beams from top */
+  .lp-rays {
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 900px; height: 520px; z-index: 1; pointer-events: none;
+  }
+  .ray {
+    position: absolute; top: 0; left: 50%;
+    transform-origin: top center;
+    width: 2px; height: 100%;
+    border-radius: 0 0 50% 50%;
+    opacity: 0;
+    animation: rayPulse 4s ease-in-out infinite;
+  }
+  .ray:nth-child(1)  { background: linear-gradient(180deg,rgba(130,0,255,0.9),transparent); transform:translateX(-50%) rotate(-55deg); animation-delay:0s; width:3px; height:420px; }
+  .ray:nth-child(2)  { background: linear-gradient(180deg,rgba(80,0,255,0.7),transparent);  transform:translateX(-50%) rotate(-40deg); animation-delay:0.3s; width:2px; height:380px; }
+  .ray:nth-child(3)  { background: linear-gradient(180deg,rgba(0,160,255,0.8),transparent); transform:translateX(-50%) rotate(-25deg); animation-delay:0.6s; width:4px; height:460px; }
+  .ray:nth-child(4)  { background: linear-gradient(180deg,rgba(0,220,255,0.9),transparent); transform:translateX(-50%) rotate(-10deg); animation-delay:0.2s; width:3px; height:500px; }
+  .ray:nth-child(5)  { background: linear-gradient(180deg,rgba(120,0,255,1.0),transparent); transform:translateX(-50%) rotate(0deg);  animation-delay:0s;   width:5px; height:520px; }
+  .ray:nth-child(6)  { background: linear-gradient(180deg,rgba(0,210,255,0.9),transparent); transform:translateX(-50%) rotate(10deg);  animation-delay:0.2s; width:3px; height:500px; }
+  .ray:nth-child(7)  { background: linear-gradient(180deg,rgba(200,0,255,0.7),transparent); transform:translateX(-50%) rotate(25deg);  animation-delay:0.6s; width:2px; height:380px; }
+  .ray:nth-child(8)  { background: linear-gradient(180deg,rgba(255,0,180,0.6),transparent); transform:translateX(-50%) rotate(40deg);  animation-delay:0.3s; width:2px; height:360px; }
+  .ray:nth-child(9)  { background: linear-gradient(180deg,rgba(0,255,160,0.5),transparent); transform:translateX(-50%) rotate(55deg);  animation-delay:0s;   width:3px; height:420px; }
+  .ray:nth-child(10) { background: linear-gradient(180deg,rgba(255,200,0,0.4),transparent); transform:translateX(-50%) rotate(-70deg); animation-delay:1s;   width:2px; height:300px; }
+  .ray:nth-child(11) { background: linear-gradient(180deg,rgba(255,200,0,0.4),transparent); transform:translateX(-50%) rotate(70deg);  animation-delay:1s;   width:2px; height:300px; }
+  @keyframes rayPulse {
+    0%,100%{opacity:0.15} 30%{opacity:0.7} 60%{opacity:0.4}
+  }
+
+  /* Glow orb behind girl */
+  .lp-orb {
+    position: absolute; top: -40px; left: 50%; transform: translateX(-50%);
+    width: 320px; height: 320px; border-radius: 50%; z-index: 1;
+    background: radial-gradient(circle, rgba(100,0,255,0.55) 0%, rgba(0,180,255,0.3) 40%, transparent 70%);
+    filter: blur(30px);
+    animation: orbPulse 3s ease-in-out infinite;
+  }
+  @keyframes orbPulse { 0%,100%{transform:translateX(-50%) scale(1)} 50%{transform:translateX(-50%) scale(1.12)} }
+
+  /* Particle dots */
+  .lp-particles { position:absolute; inset:0; z-index:1; pointer-events:none; }
+  .particle {
+    position:absolute; border-radius:50%;
+    animation: floatUp linear infinite;
+  }
+  @keyframes floatUp { 0%{transform:translateY(0) scale(1);opacity:0} 10%{opacity:1} 90%{opacity:0.3} 100%{transform:translateY(-80vh) scale(0.3);opacity:0} }
+
+  /* ── REALISTIC SEATED GIRL SVG ── */
+  .girl-wrap {
+    position: relative; z-index: 5;
+    margin-top: 6px;
+    width: 280px; height: 300px;
+    display: flex; align-items: flex-end; justify-content: center;
+    flex-shrink: 0;
+  }
+  .girl-svg { width: 280px; height: 300px; overflow: visible; }
+
+  /* Gentle seated sway animations */
+  .girl-body    { animation: bodySway 3.2s ease-in-out infinite; transform-origin: 140px 200px; }
+  .girl-arm-l   { animation: armL 3.2s ease-in-out infinite; transform-origin: 100px 140px; }
+  .girl-arm-r   { animation: armR 2.4s ease-in-out infinite; transform-origin: 180px 135px; }
+  .girl-hair    { animation: hairSway 2.8s ease-in-out infinite; transform-origin: 140px 30px; }
+  .girl-curl-l  { animation: curlL 2.8s ease-in-out infinite; transform-origin: 60px 80px; }
+  .girl-curl-r  { animation: curlR 2.8s ease-in-out infinite; transform-origin: 220px 80px; }
+
+  @keyframes bodySway { 0%,100%{transform:rotate(-1.5deg) translateX(-2px)} 50%{transform:rotate(1.5deg) translateX(2px)} }
+  @keyframes armL     { 0%,100%{transform:rotate(-4deg)} 50%{transform:rotate(3deg)} }
+  @keyframes armR     { 0%,100%{transform:rotate(-18deg) translateY(2px)} 25%{transform:rotate(-5deg) translateY(-4px)} 75%{transform:rotate(-22deg) translateY(0)} }
+  @keyframes hairSway { 0%,100%{transform:rotate(-4deg) skewX(-1deg)} 50%{transform:rotate(4deg) skewX(1deg)} }
+  @keyframes curlL    { 0%,100%{transform:rotate(5deg) skewY(1deg)} 50%{transform:rotate(-8deg) skewY(-1deg)} }
+  @keyframes curlR    { 0%,100%{transform:rotate(-5deg) skewY(-1deg)} 50%{transform:rotate(8deg) skewY(1deg)} }
+
+  /* ── LOGIN CARD ── */
+  .login-wrap {
+    position: relative; z-index: 10;
+    display: flex; flex-direction: column; align-items: center;
+    width: 100%; padding: 0 16px 80px;
+    margin-top: -10px;
+  }
+  .login-box {
+    width: 100%; max-width: 420px;
+    background: rgba(8,10,24,0.82);
+    border: 1px solid rgba(130,80,255,0.35);
+    border-radius: 24px;
+    padding: 36px 36px 30px;
+    backdrop-filter: blur(28px);
+    box-shadow:
+      0 0 0 1px rgba(0,200,255,0.08),
+      0 0 60px rgba(100,0,255,0.25),
+      0 0 120px rgba(0,180,255,0.1),
+      0 40px 80px rgba(0,0,0,0.7);
+  }
+  .login-logo { text-align: center; margin-bottom: 22px; }
+  .login-logo .logo-mark {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 30px; font-weight: 700; letter-spacing: -1px;
+    background: linear-gradient(135deg, #00D4FF 0%, #8B5CF6 50%, #FF3D9A 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .login-logo .logo-sub {
+    font-size: 10px; color: rgba(150,160,200,0.7); letter-spacing: 3px; text-transform: uppercase; margin-top: 3px;
+  }
+
+  /* Tab switcher: Username / Phone */
+  .login-tabs {
+    display: flex; gap: 0; margin-bottom: 22px;
+    background: rgba(255,255,255,0.04); border-radius: 12px; padding: 4px;
+    border: 1px solid rgba(255,255,255,0.07);
+  }
+  .ltab {
+    flex: 1; padding: 9px 8px; border-radius: 9px; border: none; background: none;
+    font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 600;
+    color: var(--muted); cursor: pointer; transition: all 0.2s;
+  }
+  .ltab.active {
+    background: linear-gradient(135deg, rgba(100,0,255,0.5), rgba(0,180,255,0.3));
+    color: #fff; box-shadow: 0 2px 12px rgba(100,0,255,0.3);
+  }
+
+  /* Form panels */
+  .lform { display: none; }
+  .lform.active { display: block; }
+
+  .login-title { font-family: 'Space Grotesk', sans-serif; font-size: 19px; font-weight: 700; margin-bottom: 4px; color: #fff; }
+  .login-desc  { font-size: 12px; color: rgba(150,160,200,0.7); margin-bottom: 20px; }
+
+  .form-group { margin-bottom: 14px; }
+  .form-group label {
+    display: block; font-size: 11px; font-weight: 600; color: rgba(150,160,210,0.8);
+    letter-spacing: 0.8px; margin-bottom: 7px; text-transform: uppercase;
+  }
+  .input-wrap { position: relative; }
+  .input-icon {
+    position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
+    font-size: 15px; opacity: 0.5; pointer-events: none;
+  }
+  .form-group input {
+    width: 100%; padding: 12px 14px 12px 40px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(130,80,255,0.2);
+    border-radius: 11px;
+    color: #fff; font-family: 'Inter', sans-serif; font-size: 14px;
+    outline: none; transition: all 0.2s;
+  }
+  .form-group input:focus {
+    border-color: rgba(100,0,255,0.7);
+    background: rgba(100,0,255,0.07);
+    box-shadow: 0 0 0 3px rgba(100,0,255,0.15), 0 0 20px rgba(0,180,255,0.1);
+  }
+  .form-group input::placeholder { color: rgba(100,110,150,0.6); }
+
+  /* Phone flag row */
+  .phone-row { display: flex; gap: 8px; }
+  .flag-select {
+    width: 90px; padding: 12px 10px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(130,80,255,0.2);
+    border-radius: 11px; color: #fff;
+    font-family: 'Inter', sans-serif; font-size: 13px;
+    outline: none; cursor: pointer; transition: all 0.2s;
+    appearance: none; text-align: center;
+  }
+  .flag-select:focus { border-color: rgba(100,0,255,0.7); box-shadow: 0 0 0 3px rgba(100,0,255,0.15); }
+  .phone-input-wrap { flex: 1; }
+
+  /* Forgot */
+  .forgot-row { text-align: right; margin-top: -6px; margin-bottom: 14px; }
+  .forgot-link { font-size: 12px; color: rgba(100,160,255,0.8); cursor: pointer; }
+  .forgot-link:hover { color: var(--cyan); }
+
+  /* Main CTA */
+  .login-btn {
+    width: 100%; padding: 14px;
+    background: linear-gradient(135deg, #6000FF 0%, #0099FF 50%, #00D4FF 100%);
+    border: none; border-radius: 12px;
+    color: #fff; font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 700;
+    cursor: pointer; transition: all 0.25s; letter-spacing: 0.5px;
+    box-shadow: 0 4px 24px rgba(80,0,255,0.4), 0 0 0 1px rgba(0,200,255,0.2);
+    position: relative; overflow: hidden;
+  }
+  .login-btn::after {
+    content:''; position:absolute; inset:0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+    opacity:0; transition: opacity 0.2s;
+  }
+  .login-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(80,0,255,0.55), 0 0 60px rgba(0,200,255,0.2); }
+  .login-btn:hover::after { opacity:1; }
+  .login-btn:active { transform: translateY(0); }
+
+  /* Divider */
+  .or-divider {
+    display: flex; align-items: center; gap: 12px;
+    margin: 18px 0; font-size: 12px; color: rgba(100,110,150,0.6);
+  }
+  .or-divider::before,.or-divider::after {
+    content:''; flex:1; height:1px;
+    background: linear-gradient(90deg, transparent, rgba(130,80,255,0.25), transparent);
+  }
+
+  /* Social buttons */
+  .social-btns { display: flex; flex-direction: column; gap: 10px; }
+  .social-btn {
+    width: 100%; padding: 12px 16px;
+    border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.04);
+    color: #fff; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
+    cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+  }
+  .social-btn:hover { background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.2); transform: translateY(-1px); }
+  .social-btn.google { border-color: rgba(234,67,53,0.3); }
+  .social-btn.google:hover { background: rgba(234,67,53,0.08); border-color: rgba(234,67,53,0.5); box-shadow: 0 4px 16px rgba(234,67,53,0.2); }
+  .g-icon { width:18px; height:18px; flex-shrink:0; }
+
+  .login-error {
+    background: rgba(255,61,113,0.1); border: 1px solid rgba(255,61,113,0.3);
+    border-radius: 10px; padding: 10px 14px;
+    font-size: 13px; color: #FF6B8A; margin-top: 12px; display: none;
+  }
+
+  .login-footer { text-align: center; margin-top: 18px; font-size: 12px; color: rgba(100,110,150,0.7); }
+  .login-footer span { color: var(--cyan); cursor: pointer; font-weight: 600; }
+  .login-footer span:hover { text-decoration: underline; }
+
+  .demo-hint {
+    margin-top: 14px; padding: 10px 14px;
+    background: rgba(0,212,255,0.05); border: 1px solid rgba(0,212,255,0.15);
+    border-radius: 10px; font-size: 11px; color: rgba(100,160,200,0.8); text-align: center;
+  }
+  .demo-hint strong { color: var(--cyan); }
+
+  /* Floating ticker strip on login */
+  .login-ticker {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: rgba(4,6,15,0.95); border-top: 1px solid rgba(130,80,255,0.2);
+    padding: 10px 0; overflow: hidden; z-index: 20;
+  }
+  .ticker-inner { display: flex; gap: 48px; animation: tickerScroll 30s linear infinite; white-space: nowrap; }
+  .ticker-item { font-family: 'JetBrains Mono', monospace; font-size: 12px; display: flex; gap: 8px; }
+  .ticker-sym { color: var(--text); font-weight: 500; }
+  .ticker-price { color: var(--muted); }
+  .ticker-chg.up { color: var(--buy); }
+  .ticker-chg.dn { color: var(--sell); }
+  @keyframes tickerScroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+  /* ═══════════════════════════════════════════
+     MAIN APP (after login)
+  ═══════════════════════════════════════════ */
+  #mainApp { display: none; }
+  #mainApp.active { display: block; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(7,11,20,0.92); backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px; height: 60px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700; background: linear-gradient(135deg, var(--cyan), var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px; }
+  .nav-tabs { display: flex; gap: 4px; }
+  .nav-tab { padding: 7px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; color: var(--muted); border: none; background: none; }
+  .nav-tab:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+  .nav-tab.active { color: var(--cyan); background: rgba(0,212,255,0.1); }
+  .nav-right { display: flex; align-items: center; gap: 12px; }
+  .nav-badge { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--buy); background: rgba(0,230,118,0.1); padding: 4px 10px; border-radius: 20px; border: 1px solid rgba(0,230,118,0.2); }
+  .nav-user { width: 32px; height: 32px; background: linear-gradient(135deg, var(--cyan), var(--purple)); border-radius: 50%; display: flex; align-items: center; justify-content: font-size:12px; font-weight:700; color:#000; cursor:pointer; font-size:12px; align-items:center; justify-content:center; font-family:'Space Grotesk',sans-serif; }
+  .logout-btn { padding: 6px 14px; border: 1px solid rgba(255,61,113,0.3); border-radius: 8px; font-size: 12px; color: var(--sell); cursor: pointer; background: none; transition: all 0.2s; }
+  .logout-btn:hover { background: rgba(255,61,113,0.1); }
+
+  /* SECTIONS */
+  .section { display: none; padding-top: 60px; }
+  .section.active { display: block; }
+
+  /* TICKER BAR */
+  .ticker-bar {
+    background: var(--bg2); border-bottom: 1px solid var(--border);
+    padding: 9px 0; overflow: hidden;
+  }
+  .ticker-bar .ticker-inner { animation-duration: 35s; }
+
+  /* ─── DASHBOARD ─── */
+  .dash-hero {
+    padding: 40px 32px 32px;
+    background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(0,212,255,0.07) 0%, transparent 70%);
+  }
+  .dash-greeting { font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+  .dash-title { font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 700; margin-bottom: 24px; }
+  .dash-title span { color: var(--cyan); }
+
+  /* KPI cards */
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+  .kpi-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+    padding: 20px 22px; position: relative; overflow: hidden;
+  }
+  .kpi-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: var(--accent, var(--cyan));
+  }
+  .kpi-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px; }
+  .kpi-value { font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 700; margin-bottom: 6px; }
+  .kpi-change { font-size: 12px; font-family: 'JetBrains Mono', monospace; }
+  .kpi-change.up { color: var(--buy); }
+  .kpi-change.dn { color: var(--sell); }
+
+  /* Main grid */
+  .dash-grid { display: grid; grid-template-columns: 1fr 340px; gap: 20px; padding: 0 32px 32px; }
+
+  /* Chart card */
+  .chart-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden;
+  }
+  .chart-header {
+    padding: 18px 20px 14px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .chart-title { font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 600; }
+  .chart-price { font-family: 'JetBrains Mono', monospace; font-size: 22px; color: var(--cyan); }
+  .chart-change { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--buy); }
+  .chart-tabs { display: flex; gap: 4px; }
+  .chart-tab { padding: 5px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; border: none; background: rgba(255,255,255,0.05); color: var(--muted); transition: all 0.2s; }
+  .chart-tab.active { background: rgba(0,212,255,0.15); color: var(--cyan); }
+  .chart-body { padding: 16px 20px 20px; }
+  canvas { width: 100% !important; }
+
+  /* AI Signal Panel */
+  .signal-panel { display: flex; flex-direction: column; gap: 16px; }
+  .ai-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px;
+  }
+  .ai-card-title { font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .ai-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--buy); box-shadow: 0 0 8px var(--buy); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.6;transform:scale(1.2)} }
+
+  .signal-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-radius: 10px; margin-bottom: 8px; cursor: pointer; transition: background 0.15s; }
+  .signal-item:hover { background: rgba(255,255,255,0.03); }
+  .signal-left { display: flex; align-items: center; gap: 10px; }
+  .signal-icon { width: 36px; height: 36px; border-radius: 9px; display: flex; align-items: center; justify-content: font-size:13px; background: rgba(0,212,255,0.1); font-size: 14px; align-items:center; justify-content:center; }
+  .signal-sym { font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 600; }
+  .signal-name { font-size: 11px; color: var(--muted); margin-top: 1px; }
+  .signal-badge { padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; font-family: 'Space Grotesk', sans-serif; }
+  .signal-badge.buy { background: rgba(0,230,118,0.15); color: var(--buy); border: 1px solid rgba(0,230,118,0.25); }
+  .signal-badge.sell { background: rgba(255,61,113,0.15); color: var(--sell); border: 1px solid rgba(255,61,113,0.25); }
+  .signal-badge.hold { background: rgba(255,208,96,0.1); color: var(--gold); border: 1px solid rgba(255,208,96,0.2); }
+  .signal-conf { font-size: 11px; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+
+  /* Confidence bar */
+  .conf-bar { height: 3px; background: rgba(255,255,255,0.06); border-radius: 2px; margin-top: 4px; }
+  .conf-fill { height: 100%; border-radius: 2px; transition: width 1s ease; }
+
+  /* Market news */
+  .news-item { padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .news-item:last-child { border-bottom: none; }
+  .news-tag { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--cyan); margin-bottom: 5px; }
+  .news-headline { font-size: 13px; line-height: 1.5; color: var(--text); }
+  .news-time { font-size: 11px; color: var(--muted); margin-top: 4px; font-family: 'JetBrains Mono', monospace; }
+
+  /* ─── CHARTS SECTION ─── */
+  .charts-section { padding: 32px; }
+  .section-head { margin-bottom: 28px; }
+  .section-head h2 { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700; margin-bottom: 6px; }
+  .section-head p { font-size: 14px; color: var(--muted); }
+  .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+  .chart-big { grid-column: 1 / -1; }
+  .chart-explain { padding: 14px 20px; background: rgba(0,212,255,0.04); border-top: 1px solid var(--border); font-size: 12px; color: var(--muted); line-height: 1.6; }
+  .chart-explain strong { color: var(--cyan); }
+
+  /* Candle legend */
+  .candle-legend { display: flex; gap: 20px; padding: 10px 20px; font-size: 12px; }
+  .leg-item { display: flex; align-items: center; gap: 6px; color: var(--muted); }
+  .leg-box { width: 12px; height: 12px; border-radius: 3px; }
+
+  /* ─── LEARN SECTION ─── */
+  .learn-section { padding: 32px; }
+  .level-tabs { display: flex; gap: 8px; margin-bottom: 28px; }
+  .level-tab { padding: 9px 20px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: none; color: var(--muted); transition: all 0.2s; font-family: 'Space Grotesk', sans-serif; }
+  .level-tab.active.beg { border-color: var(--buy); color: var(--buy); background: rgba(0,230,118,0.08); }
+  .level-tab.active.int { border-color: var(--gold); color: var(--gold); background: rgba(255,208,96,0.08); }
+  .level-tab.active.adv { border-color: var(--sell); color: var(--sell); background: rgba(255,61,113,0.08); }
+  .level-tab:hover:not(.active) { border-color: rgba(255,255,255,0.15); color: var(--text); }
+
+  .lessons-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .lesson-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+    padding: 22px; cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden;
+  }
+  .lesson-card:hover { border-color: rgba(0,212,255,0.3); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+  .lesson-num { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); margin-bottom: 10px; }
+  .lesson-icon { font-size: 28px; margin-bottom: 12px; }
+  .lesson-title { font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+  .lesson-desc { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 16px; }
+  .lesson-meta { display: flex; align-items: center; justify-content: space-between; }
+  .lesson-time { font-size: 11px; color: var(--muted); }
+  .lesson-pill { font-size: 10px; padding: 3px 9px; border-radius: 20px; font-weight: 600; }
+  .pill-beg { background: rgba(0,230,118,0.1); color: var(--buy); }
+  .pill-int { background: rgba(255,208,96,0.1); color: var(--gold); }
+  .pill-adv { background: rgba(255,61,113,0.1); color: var(--sell); }
+  .lesson-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 3px; }
+  .lesson-bar.beg { background: linear-gradient(90deg, var(--buy), transparent); }
+  .lesson-bar.int { background: linear-gradient(90deg, var(--gold), transparent); }
+  .lesson-bar.adv { background: linear-gradient(90deg, var(--sell), transparent); }
+
+  /* ─── AI SIGNALS SECTION ─── */
+  .signals-section { padding: 32px; }
+  .signals-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 28px; }
+  .signal-full-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 22px;
+    transition: all 0.2s;
+  }
+  .signal-full-card:hover { border-color: rgba(0,212,255,0.2); }
+  .sfc-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .sfc-sym { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; }
+  .sfc-price { font-family: 'JetBrains Mono', monospace; font-size: 14px; color: var(--muted); margin-top: 2px; }
+  .sfc-action { padding: 8px 18px; border-radius: 10px; font-size: 13px; font-weight: 700; font-family: 'Space Grotesk', sans-serif; }
+  .sfc-action.buy { background: linear-gradient(135deg, rgba(0,230,118,0.2), rgba(0,230,118,0.05)); color: var(--buy); border: 1px solid rgba(0,230,118,0.3); }
+  .sfc-action.sell { background: linear-gradient(135deg, rgba(255,61,113,0.2), rgba(255,61,113,0.05)); color: var(--sell); border: 1px solid rgba(255,61,113,0.3); }
+  .sfc-action.hold { background: linear-gradient(135deg, rgba(255,208,96,0.15), rgba(255,208,96,0.03)); color: var(--gold); border: 1px solid rgba(255,208,96,0.25); }
+  .sfc-metrics { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 14px; }
+  .sfc-metric { background: rgba(255,255,255,0.03); border-radius: 8px; padding: 10px 12px; }
+  .sfc-metric-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .sfc-metric-value { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 500; }
+  .sfc-reason { font-size: 12px; color: var(--muted); line-height: 1.6; padding: 10px 12px; background: rgba(0,212,255,0.04); border-radius: 8px; border-left: 2px solid var(--cyan); }
+
+  /* AI chat widget */
+  .ai-chat {
+    background: var(--card); border: 1px solid rgba(139,92,246,0.3); border-radius: 16px;
+    padding: 22px; margin-top: 20px;
+  }
+  .ai-chat-title { font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .ai-chat-title .badge { font-size: 10px; background: rgba(139,92,246,0.2); color: var(--purple); padding: 2px 8px; border-radius: 20px; }
+  .chat-messages { max-height: 200px; overflow-y: auto; margin-bottom: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .chat-msg { padding: 10px 14px; border-radius: 10px; font-size: 13px; line-height: 1.5; max-width: 85%; }
+  .chat-msg.ai { background: rgba(139,92,246,0.1); border: 1px solid rgba(139,92,246,0.2); color: var(--text); align-self: flex-start; }
+  .chat-msg.user { background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,0.2); color: var(--text); align-self: flex-end; }
+  .chat-input-row { display: flex; gap: 8px; }
+  .chat-input { flex: 1; padding: 10px 14px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-family: 'Inter', sans-serif; font-size: 13px; outline: none; }
+  .chat-input:focus { border-color: var(--purple); }
+  .chat-send { padding: 10px 16px; background: linear-gradient(135deg, var(--purple), #6D28D9); border: none; border-radius: 10px; color: #fff; font-size: 13px; cursor: pointer; font-family: 'Space Grotesk', sans-serif; font-weight: 600; transition: all 0.2s; }
+  .chat-send:hover { opacity: 0.9; transform: translateY(-1px); }
+  .chat-typing { font-size: 12px; color: var(--purple); padding: 4px 14px; display: none; }
+
+  /* ─── MISC ─── */
+  .sparkline-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; padding: 0 32px 20px; }
+  .spark-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; }
+  .spark-sym { font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 600; }
+  .spark-price { font-family: 'JetBrains Mono', monospace; font-size: 16px; margin: 4px 0; }
+  .spark-chg { font-size: 11px; font-family: 'JetBrains Mono', monospace; }
+  .spark-canvas-wrap { margin-top: 8px; }
+
+  @keyframes floatNote {
+    0%,100%{transform:translateY(0) rotate(-5deg);opacity:0.8}
+    50%{transform:translateY(-14px) rotate(5deg);opacity:1}
+  }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+  @media (max-width: 900px) {
+    .kpi-row { grid-template-columns: repeat(2,1fr); }
+    .dash-grid { grid-template-columns: 1fr; }
+    .charts-grid { grid-template-columns: 1fr; }
+    .lessons-grid { grid-template-columns: repeat(2,1fr); }
+    .signals-grid { grid-template-columns: 1fr; }
+    .sparkline-row { grid-template-columns: repeat(2,1fr); }
+    nav { padding: 0 16px; }
+    .nav-tabs { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ LOGIN PAGE ═══════════════ -->
+<div id="loginPage" class="active">
+
+  <!-- Background layers -->
+  <div class="lp-bg"></div>
+  <div class="lp-orb"></div>
+  <div class="lp-particles" id="lpParticles"></div>
+
+  <!-- Light rays -->
+  <div class="lp-rays">
+    <div class="ray"></div><div class="ray"></div><div class="ray"></div>
+    <div class="ray"></div><div class="ray"></div><div class="ray"></div>
+    <div class="ray"></div><div class="ray"></div><div class="ray"></div>
+    <div class="ray"></div><div class="ray"></div>
+  </div>
+
+  <!-- Realistic Seated Girl -->
+  <div class="girl-wrap">
+   <svg class="girl-svg" viewBox="0 0 280 310" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <!-- Skin tones -->
+      <radialGradient id="faceG" cx="45%" cy="35%" r="55%">
+        <stop offset="0%" stop-color="#FFD5A8"/>
+        <stop offset="60%" stop-color="#F0B882"/>
+        <stop offset="100%" stop-color="#D4956A"/>
+      </radialGradient>
+      <radialGradient id="bodySkG" cx="50%" cy="30%" r="60%">
+        <stop offset="0%" stop-color="#F5C494"/>
+        <stop offset="100%" stop-color="#D48B62"/>
+      </radialGradient>
+      <!-- Dress -->
+      <linearGradient id="dressTop" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#C840FF"/>
+        <stop offset="50%" stop-color="#8B20E0"/>
+        <stop offset="100%" stop-color="#5A0DAA"/>
+      </linearGradient>
+      <linearGradient id="dressSkirt" x1="0%" y1="0%" x2="30%" y2="100%">
+        <stop offset="0%" stop-color="#A030E8"/>
+        <stop offset="100%" stop-color="#4A089A"/>
+      </linearGradient>
+      <!-- Hair dark brown -->
+      <radialGradient id="hairDark" cx="40%" cy="25%" r="65%">
+        <stop offset="0%" stop-color="#4A2205"/>
+        <stop offset="55%" stop-color="#2A1002"/>
+        <stop offset="100%" stop-color="#140800"/>
+      </radialGradient>
+      <radialGradient id="hairMid" cx="50%" cy="20%" r="50%">
+        <stop offset="0%" stop-color="#5C2E0A"/>
+        <stop offset="100%" stop-color="#1E0C01"/>
+      </radialGradient>
+      <!-- Eye gradients -->
+      <radialGradient id="eyeIrisL" cx="40%" cy="35%" r="55%">
+        <stop offset="0%" stop-color="#5B3A8A"/>
+        <stop offset="100%" stop-color="#1A0040"/>
+      </radialGradient>
+      <radialGradient id="eyeIrisR" cx="40%" cy="35%" r="55%">
+        <stop offset="0%" stop-color="#5B3A8A"/>
+        <stop offset="100%" stop-color="#1A0040"/>
+      </radialGradient>
+      <!-- Lip -->
+      <linearGradient id="lipG" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#E8607A"/>
+        <stop offset="100%" stop-color="#C03050"/>
+      </linearGradient>
+      <!-- Glow -->
+      <filter id="gF" x="-30%" y="-30%" width="160%" height="160%">
+        <feGaussianBlur stdDeviation="4" result="b"/>
+        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="softF" x="-40%" y="-40%" width="180%" height="180%">
+        <feGaussianBlur stdDeviation="9"/>
+      </filter>
+      <filter id="hairF" x="-10%" y="-10%" width="120%" height="120%">
+        <feGaussianBlur stdDeviation="1.2" result="b"/>
+        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+
+    <!-- BG glow halo behind figure -->
+    <ellipse cx="140" cy="200" rx="90" ry="110" fill="#8B20E0" opacity="0.18" filter="url(#softF)"/>
+    <ellipse cx="140" cy="160" rx="60" ry="70" fill="#00A8FF" opacity="0.10" filter="url(#softF)"/>
+
+    <!-- ════ SEATED BODY STRUCTURE ════ -->
+    <!-- Thighs / lap (seated) -->
+    <g class="girl-body">
+      <!-- Left thigh going forward -->
+      <path d="M105 210 Q90 215 82 240 Q78 255 85 265 Q95 270 108 265 Q118 258 120 240 Q122 220 115 210 Z" fill="url(#bodySkG)"/>
+      <!-- Right thigh going forward -->
+      <path d="M175 210 Q190 215 198 240 Q202 255 195 265 Q185 270 172 265 Q162 258 160 240 Q158 220 165 210 Z" fill="url(#bodySkG)"/>
+      <!-- Knees shading -->
+      <ellipse cx="100" cy="255" rx="18" ry="12" fill="#C8905A" opacity="0.4"/>
+      <ellipse cx="180" cy="255" rx="18" ry="12" fill="#C8905A" opacity="0.4"/>
+      <!-- Lower legs dangling -->
+      <path d="M85 263 Q78 280 80 295 Q82 305 90 308 Q98 310 102 300 Q106 285 108 263 Z" fill="url(#bodySkG)"/>
+      <path d="M195 263 Q202 280 200 295 Q198 305 190 308 Q182 310 178 300 Q174 285 172 263 Z" fill="url(#bodySkG)"/>
+      <!-- Cute ankle boots -->
+      <path d="M78 295 Q70 302 72 310 Q80 315 96 313 Q106 308 104 298 Z" fill="#2A0070"/>
+      <path d="M200 295 Q208 302 206 310 Q198 315 182 313 Q172 308 174 298 Z" fill="#2A0070"/>
+      <path d="M70 307 Q80 314 96 313" stroke="#4010A0" stroke-width="1.5" fill="none"/>
+      <path d="M208 307 Q198 314 182 313" stroke="#4010A0" stroke-width="1.5" fill="none"/>
+
+      <!-- DRESS SKIRT spread over lap -->
+      <path d="M95 175 Q70 185 65 210 Q60 235 72 255 Q82 268 105 268 Q125 272 140 272 Q155 272 175 268 Q198 268 208 255 Q220 235 215 210 Q210 185 185 175 Q165 168 140 167 Q115 168 95 175 Z" fill="url(#dressSkirt)"/>
+      <!-- Skirt fabric folds -->
+      <path d="M90 200 Q100 220 110 240" stroke="rgba(200,100,255,0.3)" stroke-width="2" fill="none"/>
+      <path d="M140 195 Q140 220 142 248" stroke="rgba(200,100,255,0.25)" stroke-width="2" fill="none"/>
+      <path d="M190 200 Q180 220 170 240" stroke="rgba(200,100,255,0.3)" stroke-width="2" fill="none"/>
+      <!-- Dress shimmer dots -->
+      <circle cx="110" cy="215" r="1.5" fill="white" opacity="0.5"/>
+      <circle cx="155" cy="225" r="1.2" fill="white" opacity="0.4"/>
+      <circle cx="130" cy="245" r="1" fill="white" opacity="0.5"/>
+      <circle cx="168" cy="210" r="1.5" fill="white" opacity="0.35"/>
+
+      <!-- TORSO / DRESS TOP -->
+      <path d="M108 130 Q100 140 98 160 Q96 175 100 185 Q115 192 140 192 Q165 192 180 185 Q184 175 182 160 Q180 140 172 130 Q158 122 140 120 Q122 122 108 130 Z" fill="url(#dressTop)"/>
+      <!-- Neckline detail -->
+      <path d="M122 130 Q140 138 158 130" stroke="rgba(255,180,255,0.5)" stroke-width="1.5" fill="none"/>
+      <!-- Waist belt -->
+      <path d="M100 172 Q120 178 140 178 Q160 178 180 172" stroke="rgba(255,200,255,0.35)" stroke-width="3" fill="none" stroke-linecap="round"/>
+
+      <!-- SHOULDERS / upper arms -->
+      <ellipse cx="100" cy="130" rx="14" ry="10" fill="url(#dressTop)"/>
+      <ellipse cx="180" cy="130" rx="14" ry="10" fill="url(#dressTop)"/>
+
+      <!-- ARMS -->
+      <!-- Left arm resting on lap -->
+      <g class="girl-arm-l">
+        <path d="M100 132 Q82 148 76 168 Q72 182 82 190 Q90 194 98 186 Q108 174 112 158 Q116 140 108 132 Z" fill="url(#bodySkG)"/>
+        <!-- Forearm -->
+        <path d="M82 188 Q68 200 72 215 Q76 228 88 226 Q100 224 104 210 Q108 196 98 186 Z" fill="url(#bodySkG)"/>
+        <!-- Hand resting on knee -->
+        <ellipse cx="83" cy="228" rx="13" ry="9" fill="#F5C494"/>
+        <path d="M74 225 Q72 218 75 215" stroke="#D4956A" stroke-width="2" stroke-linecap="round" fill="none"/>
+        <path d="M78 228 Q74 222 76 217" stroke="#D4956A" stroke-width="2" stroke-linecap="round" fill="none"/>
+        <path d="M88 230 Q84 224 85 218" stroke="#D4956A" stroke-width="2" stroke-linecap="round" fill="none"/>
+        <path d="M94 228 Q92 222 93 217" stroke="#D4956A" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </g>
+      <!-- Right arm raised / waving -->
+      <g class="girl-arm-r">
+        <path d="M180 132 Q198 118 205 100 Q210 85 202 78 Q193 72 185 80 Q176 92 174 110 Q172 126 178 134 Z" fill="url(#bodySkG)"/>
+        <!-- Forearm continues up -->
+        <path d="M202 79 Q208 62 215 52 Q220 44 215 38 Q208 33 200 40 Q193 50 190 65 Q187 76 195 82 Z" fill="url(#bodySkG)"/>
+        <!-- Hand waving -->
+        <ellipse cx="213" cy="40" rx="10" ry="12" fill="#F5C494"/>
+        <path d="M207 32 Q204 24 206 18" stroke="#F5C494" stroke-width="6" stroke-linecap="round" fill="none"/>
+        <path d="M213 30 Q211 22 213 16" stroke="#F5C494" stroke-width="6" stroke-linecap="round" fill="none"/>
+        <path d="M219 32 Q218 24 220 18" stroke="#F5C494" stroke-width="6" stroke-linecap="round" fill="none"/>
+        <path d="M224 36 Q224 28 226 22" stroke="#F5C494" stroke-width="5" stroke-linecap="round" fill="none"/>
+        <path d="M202 38 Q200 30 201 24" stroke="#F5C494" stroke-width="5" stroke-linecap="round" fill="none"/>
+      </g>
+
+      <!-- NECK -->
+      <path d="M128 115 Q134 110 140 110 Q146 110 152 115 Q155 122 152 130 Q146 136 140 136 Q134 136 128 130 Q125 122 128 115 Z" fill="#F0B882"/>
+      <!-- Collarbone hint -->
+      <path d="M118 128 Q130 122 140 122 Q150 122 162 128" stroke="#D4956A" stroke-width="1" fill="none" opacity="0.5"/>
+
+      <!-- HEAD -->
+      <ellipse cx="140" cy="82" rx="42" ry="46" fill="url(#faceG)" filter="url(#gF)"/>
+      <!-- Jaw / chin slight emphasis -->
+      <path d="M110 98 Q120 118 140 122 Q160 118 170 98" fill="url(#faceG)"/>
+
+      <!-- ── FACIAL FEATURES ── -->
+      <!-- Eyebrows (thick, arched) -->
+      <path d="M114 70 Q122 64 132 67" stroke="#2A1002" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+      <path d="M148 67 Q158 64 166 70" stroke="#2A1002" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+      <!-- Eyebrow highlight -->
+      <path d="M115 70 Q122 65 131 68" stroke="#5C2E0A" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.5"/>
+
+      <!-- Eyes — upper lid -->
+      <path d="M112 80 Q123 73 134 78 Q126 86 114 84 Z" fill="#1A0040"/>
+      <path d="M146 78 Q157 73 168 80 Q166 86 154 84 Z" fill="#1A0040"/>
+      <!-- Iris -->
+      <circle cx="123" cy="80" r="7.5" fill="url(#eyeIrisL)"/>
+      <circle cx="157" cy="80" r="7.5" fill="url(#eyeIrisR)"/>
+      <!-- Pupil -->
+      <circle cx="123" cy="80" r="4.5" fill="#0A0015"/>
+      <circle cx="157" cy="80" r="4.5" fill="#0A0015"/>
+      <!-- Eye shine highlights -->
+      <circle cx="126" cy="77" r="2.2" fill="white" opacity="0.9"/>
+      <circle cx="160" cy="77" r="2.2" fill="white" opacity="0.9"/>
+      <circle cx="121" cy="82" r="1" fill="white" opacity="0.5"/>
+      <circle cx="155" cy="82" r="1" fill="white" opacity="0.5"/>
+      <!-- Lower eyelid -->
+      <path d="M114 84 Q123 89 134 84" stroke="#C8956A" stroke-width="1" fill="none"/>
+      <path d="M146 84 Q157 89 168 84" stroke="#C8956A" stroke-width="1" fill="none"/>
+      <!-- Eyelashes upper left -->
+      <path d="M113 78 Q110 73 109 68" stroke="#0A0015" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+      <path d="M117 75 Q115 70 115 65" stroke="#0A0015" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+      <path d="M122 73 Q122 68 123 63" stroke="#0A0015" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+      <path d="M127 74 Q129 69 131 65" stroke="#0A0015" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+      <path d="M132 76 Q135 72 138 68" stroke="#0A0015" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+      <!-- Eyelashes upper right -->
+      <path d="M147 76 Q144 72 142 68" stroke="#0A0015" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+      <path d="M152 74 Q151 69 151 64" stroke="#0A0015" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+      <path d="M157 73 Q158 68 159 63" stroke="#0A0015" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+      <path d="M162 75 Q165 70 167 66" stroke="#0A0015" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+      <path d="M167 78 Q170 73 172 69" stroke="#0A0015" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+
+      <!-- Nose (delicate) -->
+      <path d="M136 88 Q134 97 137 101 Q140 103 143 101 Q146 97 144 88" stroke="#C8905A" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+      <ellipse cx="136" cy="101" rx="3.5" ry="2" fill="#C8905A" opacity="0.4"/>
+      <ellipse cx="144" cy="101" rx="3.5" ry="2" fill="#C8905A" opacity="0.4"/>
+
+      <!-- Lips (full, realistic) -->
+      <!-- Upper lip -->
+      <path d="M126 109 Q130 105 136 107 Q140 104 144 107 Q150 105 154 109 Q148 112 140 111 Q132 112 126 109 Z" fill="url(#lipG)"/>
+      <!-- Lower lip -->
+      <path d="M126 109 Q133 117 140 118 Q147 117 154 109 Q148 112 140 111 Q132 112 126 109 Z" fill="#E06070"/>
+      <!-- Lip shine -->
+      <path d="M132 108 Q137 105 142 108" stroke="rgba(255,220,230,0.6)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <!-- Smile crinkle -->
+      <path d="M124 111 Q120 114 122 118" stroke="#C05060" stroke-width="1" fill="none" stroke-linecap="round"/>
+      <path d="M156 111 Q160 114 158 118" stroke="#C05060" stroke-width="1" fill="none" stroke-linecap="round"/>
+
+      <!-- Blush -->
+      <ellipse cx="110" cy="92" rx="12" ry="7" fill="rgba(255,140,140,0.22)" filter="url(#softF)"/>
+      <ellipse cx="170" cy="92" rx="12" ry="7" fill="rgba(255,140,140,0.22)" filter="url(#softF)"/>
+
+      <!-- Ear -->
+      <ellipse cx="98" cy="88" rx="6" ry="9" fill="#F0B882"/>
+      <ellipse cx="182" cy="88" rx="6" ry="9" fill="#F0B882"/>
+      <path d="M100 83 Q97 88 100 93" stroke="#D4956A" stroke-width="1.2" fill="none"/>
+      <!-- Earring -->
+      <circle cx="98" cy="95" r="3" fill="#FFD060" filter="url(#gF)"/>
+      <circle cx="182" cy="95" r="3" fill="#FFD060" filter="url(#gF)"/>
+      <path d="M98 98 L98 104" stroke="#FFD060" stroke-width="1.5"/>
+      <path d="M182 98 L182 104" stroke="#FFD060" stroke-width="1.5"/>
+      <circle cx="98" cy="106" r="3" fill="#FF80C0" filter="url(#gF)"/>
+      <circle cx="182" cy="106" r="3" fill="#FF80C0" filter="url(#gF)"/>
+
+      <!-- ════ HAIR — LONG CURLY REALISTIC ════ -->
+      <!-- Back hair layer (deepest) -->
+      <g class="girl-curl-l">
+        <!-- Left side main curl cascade -->
+        <path d="M98 48 Q72 55 58 75 Q44 98 50 122 Q56 148 48 170 Q40 193 46 215 Q52 234 60 242" stroke="#140800" stroke-width="22" stroke-linecap="round" fill="none" filter="url(#hairF)"/>
+        <path d="M98 48 Q72 55 58 75 Q44 98 50 122 Q56 148 48 170 Q40 193 46 215 Q52 234 60 242" stroke="#2A1002" stroke-width="16" stroke-linecap="round" fill="none"/>
+        <path d="M98 48 Q72 55 58 75 Q44 98 50 122 Q56 148 48 170 Q40 193 46 215 Q52 234 60 242" stroke="#3D1A05" stroke-width="9" stroke-linecap="round" fill="none"/>
+        <!-- Curl body left — S-waves -->
+        <path d="M55 88 Q38 95 42 108 Q48 118 62 112" stroke="#2A1002" stroke-width="12" stroke-linecap="round" fill="none"/>
+        <path d="M50 130 Q32 138 36 152 Q42 164 58 158" stroke="#2A1002" stroke-width="11" stroke-linecap="round" fill="none"/>
+        <path d="M47 175 Q28 184 32 198 Q38 210 56 205" stroke="#2A1002" stroke-width="11" stroke-linecap="round" fill="none"/>
+        <path d="M48 218 Q30 228 33 242 Q38 254 55 250" stroke="#2A1002" stroke-width="10" stroke-linecap="round" fill="none"/>
+        <!-- Hair shine streaks left -->
+        <path d="M90 52 Q68 68 62 92 Q56 118 60 140" stroke="#6B3A10" stroke-width="3" fill="none" opacity="0.5" stroke-linecap="round"/>
+        <path d="M82 55 Q62 75 55 100" stroke="#8B5020" stroke-width="2" fill="none" opacity="0.3" stroke-linecap="round"/>
+      </g>
+      <g class="girl-curl-r">
+        <!-- Right side main curl cascade -->
+        <path d="M182 48 Q208 55 222 75 Q236 98 230 122 Q224 148 232 170 Q240 193 234 215 Q228 234 220 242" stroke="#140800" stroke-width="22" stroke-linecap="round" fill="none" filter="url(#hairF)"/>
+        <path d="M182 48 Q208 55 222 75 Q236 98 230 122 Q224 148 232 170 Q240 193 234 215 Q228 234 220 242" stroke="#2A1002" stroke-width="16" stroke-linecap="round" fill="none"/>
+        <path d="M182 48 Q208 55 222 75 Q236 98 230 122 Q224 148 232 170 Q240 193 234 215 Q228 234 220 242" stroke="#3D1A05" stroke-width="9" stroke-linecap="round" fill="none"/>
+        <!-- Curl body right — S-waves -->
+        <path d="M225 88 Q242 95 238 108 Q232 118 218 112" stroke="#2A1002" stroke-width="12" stroke-linecap="round" fill="none"/>
+        <path d="M230 130 Q248 138 244 152 Q238 164 222 158" stroke="#2A1002" stroke-width="11" stroke-linecap="round" fill="none"/>
+        <path d="M233 175 Q252 184 248 198 Q242 210 224 205" stroke="#2A1002" stroke-width="11" stroke-linecap="round" fill="none"/>
+        <path d="M232 218 Q250 228 247 242 Q242 254 225 250" stroke="#2A1002" stroke-width="10" stroke-linecap="round" fill="none"/>
+        <!-- Hair shine streaks right -->
+        <path d="M190 52 Q212 68 218 92 Q224 118 220 140" stroke="#6B3A10" stroke-width="3" fill="none" opacity="0.5" stroke-linecap="round"/>
+        <path d="M198 55 Q218 75 225 100" stroke="#8B5020" stroke-width="2" fill="none" opacity="0.3" stroke-linecap="round"/>
+      </g>
+
+      <!-- Top hair — crown volume -->
+      <g class="girl-hair">
+        <!-- Main crown mass -->
+        <path d="M96 60 Q90 38 98 24 Q108 8 125 5 Q140 2 155 8 Q168 14 174 28 Q180 42 176 60 Q160 48 140 46 Q120 48 96 60 Z" fill="url(#hairDark)"/>
+        <!-- Hair volume bump left -->
+        <path d="M96 60 Q82 52 80 40 Q80 28 90 22 Q100 14 114 14" fill="url(#hairMid)"/>
+        <!-- Hair volume bump right -->
+        <path d="M184 60 Q196 52 196 40 Q196 28 186 22 Q176 14 162 14" fill="url(#hairMid)"/>
+        <!-- Crown highlight/shine -->
+        <path d="M108 18 Q125 10 145 14 Q158 18 168 28" stroke="#6B3A10" stroke-width="3" fill="none" opacity="0.45" stroke-linecap="round"/>
+        <path d="M112 15 Q128 8 148 12" stroke="#8B5020" stroke-width="2" fill="none" opacity="0.3" stroke-linecap="round"/>
+        <!-- Bangs / fringe -->
+        <path d="M96 60 Q100 50 110 54 Q118 58 126 52 Q132 48 140 50 Q148 48 154 52 Q162 58 170 54 Q180 50 184 60" fill="#1E0C01"/>
+        <!-- Fringe wisp left -->
+        <path d="M96 62 Q88 68 86 78" stroke="#1E0C01" stroke-width="6" stroke-linecap="round" fill="none"/>
+        <!-- Fringe wisp right -->
+        <path d="M184 62 Q192 68 194 78" stroke="#1E0C01" stroke-width="6" stroke-linecap="round" fill="none"/>
+        <!-- Hair clip / accessory -->
+        <rect x="155" y="44" width="14" height="6" rx="3" fill="#FF60C0" transform="rotate(-15,162,47)"/>
+        <circle cx="162" cy="47" r="3" fill="#FFD060" filter="url(#gF)"/>
+      </g>
+    </g><!-- /girl-body -->
+
+    <!-- Floating sparkles -->
+    <g class="sparkle-group" opacity="0.9">
+      <circle cx="38" cy="130" r="3" fill="#FFD060" filter="url(#gF)"><animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/></circle>
+      <circle cx="242" cy="120" r="2.5" fill="#FF80FF" filter="url(#gF)"><animate attributeName="opacity" values="1;0.3;1" dur="2.3s" repeatCount="indefinite"/></circle>
+      <circle cx="30" cy="80" r="2" fill="#00D4FF" filter="url(#gF)"><animate attributeName="opacity" values="0.4;1;0.4" dur="1.8s" repeatCount="indefinite"/></circle>
+      <circle cx="250" cy="85" r="2" fill="#A855F7" filter="url(#gF)"><animate attributeName="opacity" values="1;0.4;1" dur="2.5s" repeatCount="indefinite"/></circle>
+      <text x="22" y="170" font-size="16" fill="#FFD060" opacity="0.85"><animate attributeName="y" values="170;158;170" dur="2.1s" repeatCount="indefinite"/>♪</text>
+      <text x="248" y="160" font-size="14" fill="#FF80FF" opacity="0.8"><animate attributeName="y" values="160;148;160" dur="2.4s" repeatCount="indefinite"/>♫</text>
+      <circle cx="42" cy="220" r="2" fill="#00FF88"><animate attributeName="opacity" values="0.3;0.9;0.3" dur="3s" repeatCount="indefinite"/></circle>
+      <circle cx="238" cy="230" r="2" fill="#FFD060"><animate attributeName="opacity" values="0.9;0.3;0.9" dur="2.7s" repeatCount="indefinite"/></circle>
+    </g>
+   </svg>
+  </div>
+
+  <!-- Login Card -->
+  <div class="login-wrap">
+    <div class="login-box">
+      <div class="login-logo">
+        <div class="logo-mark">Trading AT3X</div>
+        <div class="logo-sub">AI-Powered Trading Platform</div>
+      </div>
+
+      <!-- Tab switcher -->
+      <div class="login-tabs">
+        <button class="ltab active" onclick="switchLoginTab('user',this)">👤 Username</button>
+        <button class="ltab" onclick="switchLoginTab('phone',this)">📱 Mobile</button>
+      </div>
+
+      <!-- USERNAME form -->
+      <div class="lform active" id="lform-user">
+        <div class="login-title">Welcome back 👋</div>
+        <div class="login-desc">Sign in to access your AI trading dashboard</div>
+
+        <div class="form-group">
+          <label>Username</label>
+          <div class="input-wrap">
+            <span class="input-icon">👤</span>
+            <input type="text" id="loginUser" placeholder="Enter your username" autocomplete="username">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <div class="input-wrap">
+            <span class="input-icon">🔒</span>
+            <input type="password" id="loginPass" placeholder="Enter your password" autocomplete="current-password">
+          </div>
+        </div>
+        <div class="forgot-row"><span class="forgot-link">Forgot password?</span></div>
+        <button class="login-btn" onclick="doLogin()">Sign In to Platform →</button>
+      </div>
+
+      <!-- PHONE form -->
+      <div class="lform" id="lform-phone">
+        <div class="login-title">Login with Mobile 📱</div>
+        <div class="login-desc">Enter your number — we'll send an OTP</div>
+
+        <div class="form-group">
+          <label>Mobile Number</label>
+          <div class="phone-row">
+            <select class="flag-select">
+              <option>🇵🇰 +92</option>
+              <option>🇺🇸 +1</option>
+              <option>🇬🇧 +44</option>
+              <option>🇮🇳 +91</option>
+              <option>🇦🇪 +971</option>
+              <option>🇸🇦 +966</option>
+              <option>🇹🇷 +90</option>
+              <option>🇩🇪 +49</option>
+            </select>
+            <div class="phone-input-wrap">
+              <div class="input-wrap">
+                <span class="input-icon">📱</span>
+                <input type="tel" id="loginPhone" placeholder="3XX-XXXXXXX">
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="login-btn" onclick="doPhoneLogin()" style="background:linear-gradient(135deg,#00C6FF,#0072FF,#6B00FF)">Send OTP Code →</button>
+        <div id="otpSection" style="display:none;margin-top:14px">
+          <div class="form-group">
+            <label>Enter OTP</label>
+            <div class="input-wrap">
+              <span class="input-icon">🔢</span>
+              <input type="number" id="otpInput" placeholder="6-digit code" maxlength="6">
+            </div>
+          </div>
+          <button class="login-btn" onclick="doOTPVerify()" style="margin-top:4px">Verify & Sign In →</button>
+        </div>
+      </div>
+
+      <div class="login-error" id="loginError">⚠ Incorrect credentials. Please try again.</div>
+
+      <!-- Divider -->
+      <div class="or-divider">or continue with</div>
+
+      <!-- Social -->
+      <div class="social-btns">
+        <button class="social-btn google" onclick="doGoogleLogin()">
+          <svg class="g-icon" viewBox="0 0 24 24">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          Continue with Google
+        </button>
+      </div>
+
+      <div class="demo-hint">
+        <strong>Demo:</strong> Username: <strong>trader</strong> &nbsp;·&nbsp; Password: <strong>at3x2024</strong>
+      </div>
+      <div class="login-footer">
+        New to AT3X? <span onclick="doLogin()">Create free account →</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="login-ticker">
+    <div class="ticker-inner" id="loginTicker"></div>
+  </div>
+</div>
+
+<!-- ═══════════════ MAIN APP ═══════════════ -->
+<div id="mainApp">
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">AT3X</div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="showSection('dashboard',this)">Dashboard</button>
+      <button class="nav-tab" onclick="showSection('charts',this)">Charts</button>
+      <button class="nav-tab" onclick="showSection('signals',this)">AI Signals</button>
+      <button class="nav-tab" onclick="showSection('learn',this)">Learn</button>
+    </div>
+    <div class="nav-right">
+      <div class="nav-badge" id="marketStatus">● MARKET OPEN</div>
+      <div class="nav-user">T</div>
+      <button class="logout-btn" onclick="doLogout()">Logout</button>
+    </div>
+  </nav>
+
+  <!-- ─── DASHBOARD SECTION ─── -->
+  <div class="section active" id="dashboard">
+    <div class="ticker-bar"><div class="ticker-inner" id="mainTicker"></div></div>
+
+    <div class="dash-hero">
+      <div class="dash-greeting">Good day, Trader 👋</div>
+      <div class="dash-title">Your <span>AI Trading Hub</span> — Live & Ready</div>
+
+      <div class="kpi-row">
+        <div class="kpi-card" style="--accent:#00E676">
+          <div class="kpi-label">Portfolio Value</div>
+          <div class="kpi-value" style="color:var(--buy)">$48,230</div>
+          <div class="kpi-change up">↑ +$1,840 today (+3.96%)</div>
+        </div>
+        <div class="kpi-card" style="--accent:#00D4FF">
+          <div class="kpi-label">Active Trades</div>
+          <div class="kpi-value" style="color:var(--cyan)">7</div>
+          <div class="kpi-change up">↑ 5 profitable</div>
+        </div>
+        <div class="kpi-card" style="--accent:#8B5CF6">
+          <div class="kpi-label">AI Signals Today</div>
+          <div class="kpi-value" style="color:var(--purple)">23</div>
+          <div class="kpi-change up">↑ 87% accuracy</div>
+        </div>
+        <div class="kpi-card" style="--accent:#FFD060">
+          <div class="kpi-label">Win Rate</div>
+          <div class="kpi-value" style="color:var(--gold)">74.2%</div>
+          <div class="kpi-change up">↑ +2.1% this week</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sparklines -->
+    <div class="sparkline-row" id="sparklineRow"></div>
+
+    <!-- Main dashboard grid -->
+    <div class="dash-grid">
+      <div class="chart-card">
+        <div class="chart-header">
+          <div>
+            <div class="chart-title">BTC / USDT</div>
+            <div style="display:flex;align-items:center;gap:12px;margin-top:4px">
+              <span class="chart-price" id="btcPrice">$67,420</span>
+              <span class="chart-change">+2.34%</span>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+            <div class="chart-tabs">
+              <button class="chart-tab active" onclick="switchChartType('line',this)">Line</button>
+              <button class="chart-tab" onclick="switchChartType('candle',this)">Candle</button>
+              <button class="chart-tab" onclick="switchChartType('bar',this)">Volume</button>
+            </div>
+            <div class="chart-tabs">
+              <button class="chart-tab active" onclick="switchPeriod('1D',this)">1D</button>
+              <button class="chart-tab" onclick="switchPeriod('1W',this)">1W</button>
+              <button class="chart-tab" onclick="switchPeriod('1M',this)">1M</button>
+            </div>
+          </div>
+        </div>
+        <div class="chart-body">
+          <canvas id="mainChart" height="260"></canvas>
+        </div>
+        <div class="candle-legend">
+          <div class="leg-item"><div class="leg-box" style="background:var(--buy)"></div> Buy Signal</div>
+          <div class="leg-item"><div class="leg-box" style="background:var(--sell)"></div> Sell Signal</div>
+          <div class="leg-item"><div class="leg-box" style="background:var(--cyan)"></div> Price</div>
+        </div>
+      </div>
+
+      <div class="signal-panel">
+        <!-- AI Signals -->
+        <div class="ai-card">
+          <div class="ai-card-title">
+            <div class="ai-dot"></div>
+            Live AI Signals
+          </div>
+          <div id="liveSignals"></div>
+        </div>
+
+        <!-- Market News -->
+        <div class="ai-card">
+          <div class="ai-card-title">📰 Market News</div>
+          <div id="newsItems"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── CHARTS SECTION ─── -->
+  <div class="section" id="charts">
+    <div class="ticker-bar"><div class="ticker-inner" id="chartTicker"></div></div>
+    <div class="charts-section">
+      <div class="section-head">
+        <h2>📊 Chart Analysis Center</h2>
+        <p>Multi-chart view with technical indicators — understand price action at a glance</p>
+      </div>
+
+      <div class="charts-grid">
+        <!-- Line chart -->
+        <div class="chart-card chart-big">
+          <div class="chart-header">
+            <div><div class="chart-title">BTC/USDT — Price with Moving Averages</div></div>
+            <div class="chart-tabs">
+              <button class="chart-tab active">MA20</button>
+              <button class="chart-tab">MA50</button>
+              <button class="chart-tab">Bollinger</button>
+            </div>
+          </div>
+          <div class="chart-body"><canvas id="lineChart" height="200"></canvas></div>
+          <div class="chart-explain"><strong>How to read:</strong> The cyan line is BTC price. Green line = 20-period Moving Average (short trend). Purple line = 50-period MA (long trend). When price crosses above the MA → <strong style="color:var(--buy)">potential BUY signal</strong>. When price falls below → <strong style="color:var(--sell)">potential SELL signal</strong>.</div>
+        </div>
+
+        <!-- RSI -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <div><div class="chart-title">RSI — Relative Strength Index</div></div>
+          </div>
+          <div class="chart-body"><canvas id="rsiChart" height="180"></canvas></div>
+          <div class="chart-explain"><strong>RSI Guide:</strong> Above <strong style="color:var(--sell)">70</strong> = Overbought (consider selling). Below <strong style="color:var(--buy)">30</strong> = Oversold (consider buying). 40–60 = Neutral zone.</div>
+        </div>
+
+        <!-- Volume -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <div><div class="chart-title">Volume Analysis</div></div>
+          </div>
+          <div class="chart-body"><canvas id="volumeChart" height="180"></canvas></div>
+          <div class="chart-explain"><strong>Volume Guide:</strong> <strong style="color:var(--buy)">Green bars</strong> = buying pressure. <strong style="color:var(--sell)">Red bars</strong> = selling pressure. High volume confirms price movements — low volume signals weak moves.</div>
+        </div>
+
+        <!-- MACD -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <div><div class="chart-title">MACD Indicator</div></div>
+          </div>
+          <div class="chart-body"><canvas id="macdChart" height="180"></canvas></div>
+          <div class="chart-explain"><strong>MACD Guide:</strong> When MACD line crosses <strong style="color:var(--buy)">above</strong> signal line → Buy. Crosses <strong style="color:var(--sell)">below</strong> → Sell. Histogram shows momentum strength.</div>
+        </div>
+
+        <!-- Pie: portfolio -->
+        <div class="chart-card">
+          <div class="chart-header"><div class="chart-title">Portfolio Allocation</div></div>
+          <div class="chart-body" style="display:flex;align-items:center;justify-content:center"><canvas id="pieChart" height="220" style="max-width:280px"></canvas></div>
+          <div class="chart-explain"><strong>Diversification:</strong> Spread risk across assets. No single asset should exceed 40% of your portfolio.</div>
+        </div>
+
+        <!-- Candlestick chart -->
+        <div class="chart-card">
+          <div class="chart-header"><div class="chart-title">ETH/USDT — Candlestick Pattern</div></div>
+          <div class="chart-body"><canvas id="candleChart" height="220"></canvas></div>
+          <div class="chart-explain"><strong>Candle Guide:</strong> <strong style="color:var(--buy)">Green candle</strong> = price closed higher. <strong style="color:var(--sell)">Red candle</strong> = price closed lower. Long wicks = price rejection at those levels.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── AI SIGNALS SECTION ─── -->
+  <div class="section" id="signals">
+    <div class="ticker-bar"><div class="ticker-inner" id="sigTicker"></div></div>
+    <div class="signals-section">
+      <div class="section-head">
+        <h2>🤖 AI Signal Engine</h2>
+        <p>Real-time buy/sell recommendations powered by machine learning and technical analysis</p>
+      </div>
+
+      <div class="signals-grid" id="signalCards"></div>
+
+      <!-- AI Chat -->
+      <div class="ai-chat">
+        <div class="ai-chat-title">
+          🧠 Ask AT3X AI
+          <span class="badge">GPT-Powered</span>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+          <div class="chat-msg ai">Hi! I'm AT3X AI. Ask me anything about trading — signals, strategies, or market conditions. I'm here to help! 📈</div>
+        </div>
+        <div class="chat-typing" id="chatTyping">AT3X AI is thinking...</div>
+        <div class="chat-input-row">
+          <input class="chat-input" id="chatInput" placeholder="e.g. Should I buy BTC now? What is RSI?" onkeydown="if(event.key==='Enter')sendChat()">
+          <button class="chat-send" onclick="sendChat()">Ask AI</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── LEARN SECTION ─── -->
+  <div class="section" id="learn">
+    <div class="ticker-bar"><div class="ticker-inner" id="learnTicker"></div></div>
+    <div class="learn-section">
+      <div class="section-head">
+        <h2>📚 Trading Academy</h2>
+        <p>From your first trade to advanced strategies — structured learning for every level</p>
+      </div>
+      <div class="level-tabs">
+        <button class="level-tab active beg" onclick="showLevel('beg',this,'beg')">🟢 Beginner</button>
+        <button class="level-tab" onclick="showLevel('int',this,'int')">🟡 Intermediate</button>
+        <button class="level-tab" onclick="showLevel('adv',this,'adv')">🔴 Advanced</button>
+      </div>
+      <div class="lessons-grid" id="lessonsGrid"></div>
+    </div>
+  </div>
+
+</div><!-- /mainApp -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script>
+/* ════════════════════════════════
+   DATA
+════════════════════════════════ */
+const tickerData = [
+  {sym:'BTC',price:'$67,420',chg:'+2.34%',up:true},
+  {sym:'ETH',price:'$3,580',chg:'+1.87%',up:true},
+  {sym:'AAPL',price:'$198.40',chg:'-0.42%',up:false},
+  {sym:'TSLA',price:'$248.60',chg:'+3.21%',up:true},
+  {sym:'NVDA',price:'$875.20',chg:'+4.10%',up:true},
+  {sym:'SPY',price:'$524.80',chg:'+0.78%',up:true},
+  {sym:'GOLD',price:'$2,318',chg:'-0.15%',up:false},
+  {sym:'SOL',price:'$168.40',chg:'+5.23%',up:true},
+  {sym:'AMZN',price:'$186.20',chg:'-1.10%',up:false},
+  {sym:'BNB',price:'$598.30',chg:'+1.45%',up:true},
+];
+
+const signalData = [
+  {sym:'BTC',icon:'₿',name:'Bitcoin',action:'buy',price:'$67,420',conf:92,entry:'$66,800',target:'$72,000',stop:'$65,000',reason:'Strong bullish divergence on RSI. Volume spike confirms upward momentum. MA50 acting as support.'},
+  {sym:'ETH',icon:'Ξ',name:'Ethereum',action:'buy',price:'$3,580',conf:85,entry:'$3,520',target:'$3,900',stop:'$3,350',reason:'Breaking above key resistance at $3,560. MACD crossover bullish. Network activity rising.'},
+  {sym:'TSLA',icon:'T',name:'Tesla Inc.',action:'sell',price:'$248.60',conf:78,entry:'$249.00',target:'$225.00',stop:'$262.00',reason:'Overbought RSI (74). Bearish engulfing candle on daily. Volume declining on recent rally.'},
+  {sym:'NVDA',icon:'N',name:'NVIDIA Corp',action:'buy',price:'$875.20',conf:88,entry:'$870.00',target:'$950.00',stop:'$840.00',reason:'AI demand catalyst. Broke out of flag pattern. Institutional accumulation detected via volume.'},
+  {sym:'GOLD',icon:'Au',name:'Gold Spot',action:'hold',price:'$2,318',conf:65,entry:'$2,318',target:'$2,400',stop:'$2,280',reason:'Consolidating between key levels. Wait for breakout confirmation. Geopolitical uncertainty supports floor.'},
+  {sym:'SOL',icon:'S',name:'Solana',action:'buy',price:'$168.40',conf:81,entry:'$165.00',target:'$190.00',stop:'$158.00',reason:'Strong ecosystem growth. Technical breakout above $165 resistance. DeFi TVL increasing.'},
+];
+
+const newsData = [
+  {tag:'CRYPTO',headline:'Bitcoin ETF inflows reach $1.2B as institutional demand surges',time:'14 min ago'},
+  {tag:'MACRO',headline:'Fed signals rate pause — markets rally on dovish tone',time:'1h ago'},
+  {tag:'TECH',headline:'NVIDIA beats earnings, raises guidance on AI chip demand',time:'2h ago'},
+  {tag:'FOREX',headline:'USD/JPY hits 155 as BOJ holds rates steady',time:'3h ago'},
+];
+
+const sparkData = [
+  {sym:'BTC/USD',price:'$67,420',chg:'+2.34%',up:true,color:'#00D4FF'},
+  {sym:'ETH/USD',price:'$3,580',chg:'+1.87%',up:true,color:'#8B5CF6'},
+  {sym:'AAPL',price:'$198.40',chg:'-0.42%',up:false,color:'#FF3D71'},
+  {sym:'NVDA',price:'$875.20',chg:'+4.10%',up:true,color:'#00E676'},
+];
+
+const lessonsData = {
+  beg: [
+    {num:'01',icon:'📖',title:'What is Trading?',desc:'Understand the basics of buying and selling financial assets, types of markets, and how exchanges work.',time:'8 min read',level:'Beginner',cls:'beg'},
+    {num:'02',icon:'📊',title:'Reading a Price Chart',desc:'Learn to read candlestick and line charts. Understand price, volume, and time axes.',time:'12 min read',level:'Beginner',cls:'beg'},
+    {num:'03',icon:'📈',title:'Bull vs Bear Markets',desc:'What does it mean when the market is bullish or bearish? How to trade in both conditions.',time:'7 min read',level:'Beginner',cls:'beg'},
+    {num:'04',icon:'💰',title:'Order Types Explained',desc:'Market orders, limit orders, stop-loss orders — what they are and when to use each one.',time:'10 min read',level:'Beginner',cls:'beg'},
+    {num:'05',icon:'🛡️',title:'Risk Management 101',desc:'Never risk more than you can afford to lose. Learn position sizing and the 1% rule.',time:'9 min read',level:'Beginner',cls:'beg'},
+    {num:'06',icon:'🔍',title:'Support & Resistance',desc:'The most fundamental concept in technical analysis — identifying price floors and ceilings.',time:'11 min read',level:'Beginner',cls:'beg'},
+  ],
+  int: [
+    {num:'01',icon:'📉',title:'Moving Averages Mastery',desc:'Deep dive into SMA, EMA, and WMA. How to use crossovers to identify trend reversals.',time:'14 min read',level:'Intermediate',cls:'int'},
+    {num:'02',icon:'⚡',title:'RSI & Momentum Trading',desc:'Using the Relative Strength Index to find overbought and oversold conditions with precision.',time:'12 min read',level:'Intermediate',cls:'int'},
+    {num:'03',icon:'🕯️',title:'Candlestick Patterns',desc:'Doji, Hammer, Engulfing, Morning Star — 20 patterns that signal trend reversals.',time:'18 min read',level:'Intermediate',cls:'int'},
+    {num:'04',icon:'📐',title:'Fibonacci Retracement',desc:'How to use the golden ratio to predict support/resistance levels and price targets.',time:'15 min read',level:'Intermediate',cls:'int'},
+    {num:'05',icon:'🌊',title:'MACD Deep Dive',desc:'Moving Average Convergence Divergence — one of the most powerful momentum indicators.',time:'13 min read',level:'Intermediate',cls:'int'},
+    {num:'06',icon:'💹',title:'Volume Profile Analysis',desc:'How volume at price levels reveals where big money is positioned in the market.',time:'16 min read',level:'Intermediate',cls:'int'},
+  ],
+  adv: [
+    {num:'01',icon:'🏦',title:'Institutional Order Flow',desc:'Understand how hedge funds and banks enter positions — and how to trade in their footsteps.',time:'20 min read',level:'Advanced',cls:'adv'},
+    {num:'02',icon:'🤖',title:'Algorithmic Trading Basics',desc:'Introduction to automated strategies, backtesting, and building your first trading bot.',time:'25 min read',level:'Advanced',cls:'adv'},
+    {num:'03',icon:'⚖️',title:'Options Strategies',desc:'Covered calls, puts, spreads, and iron condors — how to profit in any market condition.',time:'22 min read',level:'Advanced',cls:'adv'},
+    {num:'04',icon:'🌐',title:'Macro Trading Fundamentals',desc:'Trade around central bank decisions, CPI data, and geopolitical events like a macro fund.',time:'18 min read',level:'Advanced',cls:'adv'},
+    {num:'05',icon:'🧮',title:'Quantitative Analysis',desc:'Statistical edge, Sharpe ratio, drawdown analysis, and Monte Carlo simulation for traders.',time:'24 min read',level:'Advanced',cls:'adv'},
+    {num:'06',icon:'🔗',title:'DeFi & On-Chain Analysis',desc:'Wallet tracking, smart money flows, DEX liquidity analysis, and yield strategies.',time:'20 min read',level:'Advanced',cls:'adv'},
+  ],
+};
+
+/* ════════════════════════════════
+   PARTICLES
+════════════════════════════════ */
+function initParticles() {
+  const wrap = document.getElementById('lpParticles');
+  if(!wrap) return;
+  const colors = ['#8B5CF6','#00D4FF','#FF3D9A','#00E676','#FFD060','#ffffff'];
+  for(let i=0;i<38;i++){
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random()*4+1;
+    const left = Math.random()*100;
+    const dur  = Math.random()*12+8;
+    const delay= Math.random()*10;
+    const col  = colors[Math.floor(Math.random()*colors.length)];
+    p.style.cssText = `width:${size}px;height:${size}px;left:${left}%;bottom:0;background:${col};opacity:0;animation-duration:${dur}s;animation-delay:${delay}s;box-shadow:0 0 ${size*3}px ${col}`;
+    wrap.appendChild(p);
+  }
+}
+initParticles();
+
+/* ════════════════════════════════
+   LOGIN TAB SWITCH
+════════════════════════════════ */
+function switchLoginTab(tab, btn) {
+  document.querySelectorAll('.ltab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.lform').forEach(f => f.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('lform-'+tab).classList.add('active');
+  document.getElementById('loginError').style.display='none';
+}
+
+/* ════════════════════════════════
+   LOGIN
+════════════════════════════════ */
+function enterApp() {
+  document.getElementById('loginPage').classList.remove('active');
+  document.getElementById('mainApp').classList.add('active');
+  document.getElementById('loginError').style.display = 'none';
+  initApp();
+}
+
+function doLogin() {
+  const u = document.getElementById('loginUser').value.trim();
+  const p = document.getElementById('loginPass').value.trim();
+  const err = document.getElementById('loginError');
+  if (u === 'trader' && p === 'at3x2024') {
+    enterApp();
+  } else {
+    err.style.display = 'block';
+    document.getElementById('loginPass').value = '';
+  }
+}
+
+function doPhoneLogin() {
+  const phone = document.getElementById('loginPhone').value.trim();
+  if(phone.length < 7) {
+    document.getElementById('loginError').style.display='block';
+    document.getElementById('loginError').textContent='⚠ Please enter a valid mobile number.';
+    return;
+  }
+  document.getElementById('loginError').style.display='none';
+  document.getElementById('otpSection').style.display='block';
+  // Simulate OTP sent
+  const btn = event.target;
+  btn.textContent = '✅ OTP Sent! Check your phone';
+  btn.style.background = 'linear-gradient(135deg,#00E676,#00997A)';
+}
+
+function doOTPVerify() {
+  const otp = document.getElementById('otpInput').value.trim();
+  if(otp === '123456' || otp.length === 6) {
+    enterApp();
+  } else {
+    document.getElementById('loginError').style.display='block';
+    document.getElementById('loginError').textContent='⚠ Invalid OTP. Try: 123456 (demo)';
+  }
+}
+
+function doGoogleLogin() {
+  const btn = event.target.closest('button');
+  btn.textContent = '⏳ Connecting to Google...';
+  btn.style.opacity='0.7';
+  setTimeout(()=>{ enterApp(); }, 1400);
+}
+
+function doLogout() {
+  document.getElementById('mainApp').classList.remove('active');
+  document.getElementById('loginPage').classList.add('active');
+  document.getElementById('loginUser').value = '';
+  document.getElementById('loginPass').value = '';
+  document.getElementById('otpSection').style.display='none';
+}
+document.getElementById('loginPass').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+
+/* ════════════════════════════════
+   TICKER
+════════════════════════════════ */
+function buildTicker(id) {
+  const el = document.getElementById(id);
+  if(!el) return;
+  const items = [...tickerData, ...tickerData].map(t =>
+    `<div class="ticker-item">
+      <span class="ticker-sym">${t.sym}</span>
+      <span class="ticker-price">${t.price}</span>
+      <span class="ticker-chg ${t.up?'up':'dn'}">${t.chg}</span>
+    </div>`).join('');
+  el.innerHTML = items;
+}
+
+/* ════════════════════════════════
+   NAV / SECTIONS
+════════════════════════════════ */
+function showSection(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  if(id==='charts') initAllCharts();
+}
+
+/* ════════════════════════════════
+   SPARKLINES
+════════════════════════════════ */
+function buildSparklines() {
+  const row = document.getElementById('sparklineRow');
+  row.innerHTML = sparkData.map((d,i) => `
+    <div class="spark-card">
+      <div class="spark-sym">${d.sym}</div>
+      <div class="spark-price" style="color:${d.color}">${d.price}</div>
+      <div class="spark-chg" style="color:${d.up?'var(--buy)':'var(--sell)'}">${d.chg}</div>
+      <div class="spark-canvas-wrap"><canvas id="spark${i}" height="40"></canvas></div>
+    </div>`).join('');
+  sparkData.forEach((_,i) => drawSparkline(`spark${i}`, sparkData[i].up, sparkData[i].color));
+}
+
+function drawSparkline(id, up, color) {
+  const ctx = document.getElementById(id);
+  if(!ctx) return;
+  const base = 100;
+  const pts = Array.from({length:20}, (_,i) => base + (Math.random()-0.45)*8 + (up?i*0.3:-i*0.2));
+  new Chart(ctx, {
+    type:'line',
+    data:{labels:pts.map((_,i)=>i), datasets:[{data:pts, borderColor:color, borderWidth:1.5, fill:true, backgroundColor:color+'18', tension:0.4, pointRadius:0}]},
+    options:{plugins:{legend:{display:false}}, scales:{x:{display:false},y:{display:false}}, animation:{duration:0}, responsive:true, maintainAspectRatio:false}
+  });
+}
+
+/* ════════════════════════════════
+   LIVE SIGNALS (sidebar)
+════════════════════════════════ */
+function buildLiveSignals() {
+  const el = document.getElementById('liveSignals');
+  el.innerHTML = signalData.slice(0,4).map(s => `
+    <div class="signal-item">
+      <div class="signal-left">
+        <div class="signal-icon">${s.icon}</div>
+        <div>
+          <div class="signal-sym">${s.sym}</div>
+          <div class="signal-name">${s.name}</div>
+        </div>
+      </div>
+      <div style="text-align:right">
+        <div class="signal-badge ${s.action}">${s.action.toUpperCase()}</div>
+        <div class="signal-conf">${s.conf}% conf</div>
+        <div class="conf-bar"><div class="conf-fill" style="width:${s.conf}%;background:${s.action==='buy'?'var(--buy)':s.action==='sell'?'var(--sell)':'var(--gold)'}"></div></div>
+      </div>
+    </div>`).join('');
+}
+
+/* ════════════════════════════════
+   NEWS
+════════════════════════════════ */
+function buildNews() {
+  document.getElementById('newsItems').innerHTML = newsData.map(n => `
+    <div class="news-item">
+      <div class="news-tag">${n.tag}</div>
+      <div class="news-headline">${n.headline}</div>
+      <div class="news-time">${n.time}</div>
+    </div>`).join('');
+}
+
+/* ════════════════════════════════
+   SIGNAL CARDS (full page)
+════════════════════════════════ */
+function buildSignalCards() {
+  document.getElementById('signalCards').innerHTML = signalData.map(s => `
+    <div class="signal-full-card">
+      <div class="sfc-top">
+        <div>
+          <div class="sfc-sym">${s.sym} <span style="font-size:13px;color:var(--muted);font-weight:400">${s.name}</span></div>
+          <div class="sfc-price">${s.price}</div>
+        </div>
+        <div class="sfc-action ${s.action}">${s.action==='buy'?'▲ BUY':s.action==='sell'?'▼ SELL':'◆ HOLD'}</div>
+      </div>
+      <div class="sfc-metrics">
+        <div class="sfc-metric"><div class="sfc-metric-label">Entry</div><div class="sfc-metric-value" style="color:var(--cyan)">${s.entry}</div></div>
+        <div class="sfc-metric"><div class="sfc-metric-label">Target</div><div class="sfc-metric-value" style="color:var(--buy)">${s.target}</div></div>
+        <div class="sfc-metric"><div class="sfc-metric-label">Stop</div><div class="sfc-metric-value" style="color:var(--sell)">${s.stop}</div></div>
+      </div>
+      <div class="conf-bar" style="margin-bottom:10px;height:4px;background:rgba(255,255,255,0.06);border-radius:2px">
+        <div style="height:100%;width:${s.conf}%;background:${s.action==='buy'?'var(--buy)':s.action==='sell'?'var(--sell)':'var(--gold)'};border-radius:2px"></div>
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px;font-family:'JetBrains Mono',monospace">AI Confidence: ${s.conf}%</div>
+      <div class="sfc-reason">${s.reason}</div>
+    </div>`).join('');
+}
+
+/* ════════════════════════════════
+   LESSONS
+════════════════════════════════ */
+let currentLevel = 'beg';
+function showLevel(level, btn, cls) {
+  currentLevel = level;
+  document.querySelectorAll('.level-tab').forEach(t => { t.classList.remove('active','beg','int','adv'); });
+  btn.classList.add('active', cls);
+  renderLessons(level);
+}
+function renderLessons(level) {
+  document.getElementById('lessonsGrid').innerHTML = lessonsData[level].map(l => `
+    <div class="lesson-card">
+      <div class="lesson-num">LESSON ${l.num}</div>
+      <div class="lesson-icon">${l.icon}</div>
+      <div class="lesson-title">${l.title}</div>
+      <div class="lesson-desc">${l.desc}</div>
+      <div class="lesson-meta">
+        <span class="lesson-time">⏱ ${l.time}</span>
+        <span class="lesson-pill pill-${l.cls}">${l.level}</span>
+      </div>
+      <div class="lesson-bar ${l.cls}"></div>
+    </div>`).join('');
+}
+
+/* ════════════════════════════════
+   MAIN CHART
+════════════════════════════════ */
+let mainChart, currentType='line';
+function genPrices(n=60, base=67000, vol=1200) {
+  let p=base; return Array.from({length:n},()=>{p+=((Math.random()-0.48)*vol);return Math.round(p);});
+}
+function buildMainChart() {
+  const ctx = document.getElementById('mainChart');
+  if(!ctx) return;
+  if(mainChart) mainChart.destroy();
+  const labels = Array.from({length:60},(_,i)=>`${i}:00`);
+  const prices = genPrices();
+  mainChart = new Chart(ctx,{
+    type:'line',
+    data:{labels,datasets:[{
+      label:'BTC/USD', data:prices,
+      borderColor:'#00D4FF', backgroundColor:'rgba(0,212,255,0.05)',
+      borderWidth:2, fill:true, tension:0.4, pointRadius:0,
+      pointHoverRadius:5,
+    }]},
+    options:{
+      plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false,backgroundColor:'rgba(13,18,32,0.95)',borderColor:'rgba(0,212,255,0.3)',borderWidth:1,titleColor:'#E2E8F0',bodyColor:'#64748B'}},
+      scales:{
+        x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#64748B',maxTicksLimit:8,font:{size:10}}},
+        y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#64748B',font:{size:10},callback:v=>'$'+v.toLocaleString()},position:'right'},
+      },
+      responsive:true, maintainAspectRatio:false, animation:{duration:600},
+      interaction:{mode:'nearest',axis:'x',intersect:false}
+    }
+  });
+}
+function switchChartType(type, btn) {
+  currentType=type;
+  document.querySelectorAll('.chart-card .chart-tabs .chart-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  buildMainChart();
+}
+function switchPeriod(period, btn) { buildMainChart(); }
+
+/* ════════════════════════════════
+   ALL CHARTS PAGE
+════════════════════════════════ */
+let chartsInit = false;
+function initAllCharts() {
+  if(chartsInit) return; chartsInit=true;
+
+  // Line + MAs
+  const lCtx = document.getElementById('lineChart');
+  if(lCtx) {
+    const labels = Array.from({length:50},(_,i)=>i+1);
+    const price = genPrices(50,66000,1500);
+    const ma20 = price.map((_,i)=>i<19?null:price.slice(i-19,i+1).reduce((a,b)=>a+b,0)/20);
+    const ma50 = price.map((_,i)=>i<49?null:price.slice(i-49,i+1).reduce((a,b)=>a+b,0)/50);
+    new Chart(lCtx,{type:'line',data:{labels,datasets:[
+      {label:'BTC Price',data:price,borderColor:'#00D4FF',borderWidth:2,fill:false,tension:0.3,pointRadius:0},
+      {label:'MA20',data:ma20,borderColor:'#00E676',borderWidth:1.5,fill:false,tension:0.3,pointRadius:0,borderDash:[3,3]},
+      {label:'MA50',data:ma50,borderColor:'#8B5CF6',borderWidth:1.5,fill:false,tension:0.3,pointRadius:0,borderDash:[5,5]},
+    ]},options:{plugins:{legend:{labels:{color:'#64748B',font:{size:11}}}},scales:{x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#64748B',maxTicksLimit:8,font:{size:10}}},y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#64748B',font:{size:10},callback:v=>'$'+v.toLocaleString()},position:'right'}},responsive:true,maintainAspectRatio:false}});
+  }
+
+  // RSI
+  const rCtx = document.getElementById('rsiChart');
+  if(rCtx){
+    const labels = Array.from({length:40},(_,i)=>i+1);
+    const rsi = Array.from({length:40},()=>30+Math.random()*50);
+    new Chart(rCtx,{type:'line',data:{labels,datasets:[
+      {label:'RSI',data:rsi,borderColor:'#FFD060',backgroundColor:'rgba(255,208,96,0.05)',borderWidth:2,fill:true,tension:0.4,pointRadius:0},
+      {label:'Overbought (70)',data:Array(40).fill(70),borderColor:'#FF3D71',borderWidth:1,borderDash:[4,4],pointRadius:0},
+      {label:'Oversold (30)',data:Array(40).fill(30),borderColor:'#00E676',borderWidth:1,borderDash:[4,4],pointRadius:0},
+    ]},options:{plugins:{legend:{labels:{color:'#64748B',font:{size:11}}}},scales:{x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#64748B',font:{size:10}}},y:{min:0,max:100,grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#64748B',font:{size:10}}}},responsive:true,maintainAspectRatio:false}});
+  }
+
+  // Volume
+  const vCtx = document.getElementById('volumeChart');
+  if(vCtx){
+    const labels = Array.from({length:20},(_,i)=>i+1);
+    const vols = Array.from({length:20},()=>Math.floor(Math.random()*5000+1000));
+    const ups = Array.from({length:20},()=>Math.random()>0.45);
+    new Chart(vCtx,{type:'bar',data:{labels,datasets:[{label:'Volume',data:vols,backgroundColor:ups.map(u=>u?'rgba(0,230,118,0.6)':'rgba(255,61,113,0.6)'),borderColor:ups.map(u=>u?'#00E676':'#FF3D71'),borderWidth:1}]},options:{plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:'#64748B',font:{size:10}}},y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#64748B',font:{size:10}}}},responsive:true,maintainAspectRatio:false}});
+  }
+
+  // MACD
+  const mCtx = document.getElementById('macdChart');
+  if(mCtx){
+    const labels = Array.from({length:30},(_,i)=>i+1);
+    const macd = Array.from({length:30},()=>(Math.random()-0.48)*300);
+    const signal = macd.map((_,i)=>i<4?0:macd.slice(i-4,i+1).reduce((a,b)=>a+b)/5);
+    const hist = macd.map((v,i)=>v-signal[i]);
+    new Chart(mCtx,{type:'bar',data:{labels,datasets:[
+      {type:'bar',label:'Histogram',data:hist,backgroundColor:hist.map(v=>v>=0?'rgba(0,230,118,0.5)':'rgba(255,61,113,0.5)'),borderWidth:0},
+      {type:'line',label:'MACD',data:macd,borderColor:'#00D4FF',borderWidth:1.5,fill:false,tension:0.4,pointRadius:0},
+      {type:'line',label:'Signal',data:signal,borderColor:'#FF3D71',borderWidth:1.5,fill:false,tension:0.4,pointRadius:0},
+    ]},options:{plugins:{legend:{labels:{color:'#64748B',font:{size:11}}}},scales:{x:{grid:{display:false},ticks:{color:'#64748B',font:{size:10}}},y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#64748B',font:{size:10}}}},responsive:true,maintainAspectRatio:false}});
+  }
+
+  // Pie
+  const pCtx = document.getElementById('pieChart');
+  if(pCtx){
+    new Chart(pCtx,{type:'doughnut',data:{labels:['BTC','ETH','Stocks','Gold','Cash'],datasets:[{data:[35,25,22,10,8],backgroundColor:['#00D4FF','#8B5CF6','#00E676','#FFD060','#64748B'],borderColor:'#070B14',borderWidth:3}]},options:{plugins:{legend:{position:'bottom',labels:{color:'#94A3B8',font:{size:11},padding:12}}},cutout:'65%',responsive:true,maintainAspectRatio:false}});
+  }
+
+  // Candlestick (drawn manually on canvas)
+  drawCandleChart();
+}
+
+function drawCandleChart() {
+  const canvas = document.getElementById('candleChart');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  canvas.width = canvas.parentElement.clientWidth - 40;
+  canvas.height = 220;
+  const w = canvas.width, h = canvas.height;
+  const pad = {top:10,bottom:30,left:10,right:50};
+
+  // Generate candle data
+  const candles = [];
+  let base = 3500;
+  for(let i=0;i<30;i++){
+    const open=base, close=open+(Math.random()-0.47)*80;
+    const high=Math.max(open,close)+(Math.random()*30);
+    const low=Math.min(open,close)-(Math.random()*30);
+    candles.push({open,close,high,low});
+    base=close;
+  }
+  const minP=Math.min(...candles.map(c=>c.low));
+  const maxP=Math.max(...candles.map(c=>c.high));
+  const range=maxP-minP;
+  const toY=v=>pad.top+(1-(v-minP)/range)*(h-pad.top-pad.bottom);
+  const cw=(w-pad.left-pad.right)/candles.length;
+
+  ctx.clearRect(0,0,w,h);
+
+  // Grid lines
+  ctx.strokeStyle='rgba(255,255,255,0.04)';
+  ctx.lineWidth=1;
+  [0.25,0.5,0.75].forEach(r=>{
+    const y=pad.top+r*(h-pad.top-pad.bottom);
+    ctx.beginPath(); ctx.moveTo(pad.left,y); ctx.lineTo(w-pad.right,y); ctx.stroke();
+    ctx.fillStyle='#64748B'; ctx.font='10px JetBrains Mono'; ctx.textAlign='left';
+    ctx.fillText('$'+(minP+range*(1-r)).toFixed(0), w-pad.right+4, y+4);
+  });
+
+  candles.forEach((c,i)=>{
+    const x=pad.left+i*cw+cw/2;
+    const bull=c.close>=c.open;
+    const col=bull?'#00E676':'#FF3D71';
+    const oy=toY(c.open), cy=toY(c.close), hy=toY(c.high), ly=toY(c.low);
+    // Wick
+    ctx.strokeStyle=col; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(x,hy); ctx.lineTo(x,ly); ctx.stroke();
+    // Body
+    ctx.fillStyle=col;
+    const bw=Math.max(cw*0.55, 2);
+    const bTop=Math.min(oy,cy), bH=Math.abs(cy-oy)||2;
+    ctx.fillRect(x-bw/2, bTop, bw, bH);
+  });
+}
+
+/* ════════════════════════════════
+   AI CHAT
+════════════════════════════════ */
+const aiResponses = {
+  btc:["BTC is showing bullish momentum. RSI is at 62 (neutral-bullish) and we just saw a golden cross on the 4H. Short-term target: $70K. However, always set a stop-loss around $65K.","Bitcoin's on-chain data shows strong accumulation by wallets >1K BTC. This is typically a bullish signal. The AI model gives BTC an 87% buy confidence score today."],
+  rsi:["RSI (Relative Strength Index) measures momentum from 0–100. Above 70 = overbought (possible sell), below 30 = oversold (possible buy), 40–60 = neutral. It's best used with other indicators.","Think of RSI like a rubber band — the further it stretches in one direction, the more likely it snaps back. I recommend combining RSI with support/resistance for high-probability setups."],
+  sell:["Our AI signals a SELL on TSLA right now — RSI is at 74 (overbought) with a bearish engulfing candle on the daily chart. Suggested stop: $262. Target: $225.","Before selling, always check: Is this confirmed by volume? Is there a fundamental reason? AT3X AI uses 14 indicators simultaneously to score each trade."],
+  buy:["Strong BUY signals today: BTC (92% confidence), ETH (85%), NVDA (88%), SOL (81%). Each signal includes entry, target, and stop-loss prices in the AI Signals section.","A buy signal is strongest when: price is above the MA50, RSI is between 50–65, and volume is increasing. Look for confluence of signals, not just one indicator."],
+  default:["Great question! The AT3X AI analyzes price action, volume, RSI, MACD, Fibonacci levels, and on-chain data across 50+ assets in real-time. What specific asset or strategy can I help with?","Based on current market conditions, volatility is moderate. The AI recommends focusing on BTC, ETH, and NVDA which all show high-confidence signals today. Risk 1–2% per trade maximum.","Trading is about probabilities, not certainties. Even a 70% win rate means 3 losses per 10 trades. The key is making sure winners are bigger than losers. Want me to explain position sizing?"]
+};
+
+function sendChat() {
+  const input = document.getElementById('chatInput');
+  const msg = input.value.trim();
+  if(!msg) return;
+  const msgs = document.getElementById('chatMessages');
+  msgs.innerHTML += `<div class="chat-msg user">${msg}</div>`;
+  input.value='';
+  document.getElementById('chatTyping').style.display='block';
+  msgs.scrollTop = msgs.scrollHeight;
+
+  setTimeout(()=>{
+    document.getElementById('chatTyping').style.display='none';
+    const lower = msg.toLowerCase();
+    let responses = aiResponses.default;
+    if(lower.includes('btc')||lower.includes('bitcoin')) responses = aiResponses.btc;
+    else if(lower.includes('rsi')||lower.includes('strength')) responses = aiResponses.rsi;
+    else if(lower.includes('sell')||lower.includes('short')) responses = aiResponses.sell;
+    else if(lower.includes('buy')||lower.includes('long')) responses = aiResponses.buy;
+    const reply = responses[Math.floor(Math.random()*responses.length)];
+    msgs.innerHTML += `<div class="chat-msg ai">${reply}</div>`;
+    msgs.scrollTop = msgs.scrollHeight;
+  }, 1200 + Math.random()*600);
+}
+
+/* ════════════════════════════════
+   LIVE PRICE UPDATE
+════════════════════════════════ */
+function liveUpdate() {
+  const el = document.getElementById('btcPrice');
+  if(el) {
+    const base = 67420;
+    const live = base + Math.floor((Math.random()-0.5)*200);
+    el.textContent = '$' + live.toLocaleString();
+  }
+}
+
+/* ════════════════════════════════
+   INIT
+════════════════════════════════ */
+function initApp() {
+  ['loginTicker','mainTicker','chartTicker','sigTicker','learnTicker'].forEach(buildTicker);
+  buildSparklines();
+  buildLiveSignals();
+  buildNews();
+  buildSignalCards();
+  renderLessons('beg');
+  buildMainChart();
+  setInterval(liveUpdate, 3000);
+  setInterval(buildLiveSignals, 8000);
+}
+
+// Build login ticker on load
+buildTicker('loginTicker');
+
+// Allow Enter to login
+document.getElementById('loginUser').addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('loginPass').focus(); });
+</script>
+</body>
+</html>
